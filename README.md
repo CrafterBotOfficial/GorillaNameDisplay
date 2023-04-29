@@ -1,7 +1,7 @@
 # NameTag
 A simple name tag mod for Gorilla Tag.
 ## Installation
-To install this mod, ensure you have Utilla and MonkeStatistics installed. Then download the executable file from the release tab, and put it in your ``BepInEx>plugins`` folder.
+To install this mod, ensure you have Utilla. Then download the executable file from the release tab, and put it in your ``BepInEx>plugins`` folder.
 ### Usage
 To use this mod go to a modded lobby and open the watch menu. From there simply click on "NameTag" and press "Enable".
 ## Legal & Credits
