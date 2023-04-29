@@ -1,4 +1,4 @@
-# NameTag
+# Name Display
 A simple name tag mod for Gorilla Tag.
 ## Installation
 To install this mod, ensure you have Utilla. Then download the executable file from the release tab, and put it in your ``BepInEx>plugins`` folder.
