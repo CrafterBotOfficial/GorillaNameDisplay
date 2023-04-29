@@ -1,4 +1,4 @@
-﻿using MonkeStatistics.API;
+﻿/*using MonkeStatistics.API;
 using Photon.Pun;
 using UnityEngine;
 
@@ -49,7 +49,7 @@ namespace NameTag.Core
                     }
                     catch
                     {
-                        /* Do nothing */
+                        *//* Do nothing *//*
                     }
                 }
             }
@@ -57,3 +57,4 @@ namespace NameTag.Core
         }
     }
 }
+*/
