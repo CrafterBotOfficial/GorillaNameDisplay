@@ -1,27 +1,17 @@
 ﻿using HarmonyLib;
-using Photon.Pun;
+using UnityEngine;
 
 namespace NameTag.Patches
 {
-    [HarmonyPatch(typeof(VRRig), "Awake", MethodType.Normal)]
+    [HarmonyPatch(typeof(VRRig))]
     internal class VRRigPatch
     {
         [HarmonyPostfix]
-        private static void Hook(VRRig __instance)
+        [HarmonyPatch("Start")]
+        private static void HookStart(VRRig __instance)
         {
-            if (Main.RoomValid && Main.Enabled)
-            {
-                try
-                {
-                    if (__instance.GetComponent<PhotonView>().Owner.IsLocal)
-                        return;
-                    __instance.gameObject.AddComponent<Core.NameTag>();
-                }
-                catch
-                {
-                    /* Do nothing */
-                }
-            }
+            if (__instance != GorillaTagger.Instance.offlineVRRig && __instance != GorillaTagger.Instance.myVRRig && Main.RoomValid)
+                GameObject.Instantiate(Main.Instance.NameTagPrefab).AddComponent<Behaviours.NameTag>().Rig = __instance;
         }
     }
 }

@@ -1,55 +1,52 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.Logging;
 using HarmonyLib;
-using Photon.Pun;
-using System.Reflection;
+using NameTag.Util;
 using UnityEngine;
 using Utilla;
 
 namespace NameTag
 {
-    [BepInPlugin(GUID, Name, Version)]
-    //[BepInDependency("Crafterbot.MonkeStatistics")]
-    [BepInDependency("org.legoandmars.gorillatag.utilla")]
-
+    [BepInPlugin(GUID, NAME, VERSION), BepInDependency("org.legoandmars.gorillatag.utilla")]
     [System.ComponentModel.Description("HauntedModMenu")]
     [ModdedGamemode]
     internal class Main : BaseUnityPlugin
     {
         internal const string
             GUID = "crafterbot.nametag",
-            Name = "NameTag",
-            Version = "1.0.1";
-        internal static bool Enabled;
-        private void Awake()
-        {
-            Logger.LogInfo("Init : " + Name);
+            NAME = "NameDisplay",
+            VERSION = "1.0.3";
+        internal static Main Instance;
+        internal ManualLogSource manualLogSource;
+        internal GameObject NameTagPrefab;
 
-            //MonkeStatistics.API.Registry.AddAssembly();
-            new Harmony(GUID).PatchAll(Assembly.GetExecutingAssembly());
+        #region Config
+        internal static ConfigEntry<float> YOffset;
+        internal static ConfigEntry<float> Buffer;
+        #endregion
+
+        private void Start()
+        {
+            Instance = this;
+            manualLogSource = Logger;
+            $"Init : {GUID} + {VERSION}".Log();
+
+            #region Config
+            YOffset = Config.Bind("General", nameof(YOffset), 0.5f, "How high the nametag will be from the player.");
+            Buffer = Config.Bind("General", nameof(Buffer), 0.5f, "How frequently the nametag will check to see if the data on it is up-to-date. (Max:10|Min:1)(Seconds)");
+            #endregion
+
+            NameTagPrefab = AssetLoader.GetAsset("TextObj") as GameObject;
+            new Harmony(GUID).PatchAll();
         }
 
         #region Enable/Disable
         public void OnEnable()
         {
-            Enabled = true;
-            foreach (VRRig vrRig in GameObject.FindObjectsOfType<VRRig>())
-            {
-                try
-                {
-                    if (vrRig.GetComponent<Core.NameTag>() != null || vrRig.GetComponent<PhotonView>().Owner.IsLocal)
-                        return;
-                    vrRig.gameObject.AddComponent<Core.NameTag>();
-                }
-                catch
-                {
-                    /* Do nothing */
-                }
-            }
-            // if disabled, the NameTag component will handle deleting itself.
         }
         public void OnDisable()
         {
-            Enabled = false;
         }
         #endregion
         #region Modded gamemode
