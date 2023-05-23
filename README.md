@@ -1,7 +1,7 @@
 <div align="center">
   <h1>NameDisplay</h1>
   <p align="left">A simple nametag plugin for Gorilla Tag that only works in modded lobbies.</p>
-  <a href="https://github.com/CrafterBotOfficial/TextureLoader/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-%23373737"</img></a>
+  <a href="https://github.com/CrafterBotOfficial/TextureLoader/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-%23373737"</img></a>
   <img src="https://img.shields.io/github/downloads/CrafterBotOfficial/NameTag/total">
   <a href="https://discord.gg/rxSEV6PqJu">
   <img src = "https://img.shields.io/discord/1058184246335897671?color=%235865F2&label=Crafterbot%27s%20Discord&logo=discord">
