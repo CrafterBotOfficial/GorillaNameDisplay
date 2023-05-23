@@ -1,10 +1,15 @@
-# Name Display
-A simple name tag mod for Gorilla Tag.
-## Installation
-To install this mod, ensure you have Utilla. Then download the executable file from the release tab, and put it in your ``BepInEx>plugins`` folder.
-### Usage
-To use this mod go to a modded lobby and open the Haunted Menu. From there simply click on "NameTag".
+<div align="center">
+  <h1>NameDisplay</h1>
+  <p align="left">A simple nametag plugin for Gorilla Tag that only works in modded lobbies.</p>
+  
+  <a href="https://github.com/CrafterBotOfficial/TextureLoader/blob/main/LICENSE">
+<img src="https://img.shields.io/badge/license-MIT-%23373737"</img>
+</a>
+  <img src="https://img.shields.io/github/downloads/CrafterBotOfficial/NameTag/total">
+  <a href="https://discord.gg/rxSEV6PqJu">
+  <img src = "https://img.shields.io/discord/1058184246335897671?color=%235865F2&label=Crafterbot%27s%20Discord&logo=discord">
+  </a>
+</div>
+
 ## Legal & Credits
-* This mod was inspired by a cheat.
 * This product is not affiliated with Gorilla Tag or Another Axiom LLC and is not endorsed or otherwise sponsored by Another Axiom LLC. Portions of the materials contained herein are property of Another Axiom LLC. © 2021 Another Axiom LLC.
-* I(Crafterbot) hold no responiblity in the case you get banned. Note all mods can get you banned. If you wish to lower your chance of getting banned ONLY download your mods from the official Gorilla Tag Modding Group.
