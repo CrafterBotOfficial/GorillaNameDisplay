@@ -7,6 +7,7 @@
   <img src = "https://img.shields.io/discord/1058184246335897671?color=%235865F2&label=Crafterbot%27s%20Discord&logo=discord">
   </a>
 </div>
+
 ## Installation 
 To install this plugin download the .DLL file from releases. Then put the .DLL file into your ``GorillaTag->BepInEx->plugins``. Do the same for [Utilla](https://github.com/legoandmars/Utilla).
 ## Usage
