@@ -24,5 +24,16 @@ namespace NameDisplay
             Behaviours.NameTag.ActiveNameTags = new System.Collections.Generic.Dictionary<string, Behaviours.NameTag>();
             new HarmonyLib.Harmony(GUID).PatchAll();
         }
+
+        #region Enable/Disable
+        public void OnEnable()
+        {
+            manualLogSource.LogInfo("Enabled");
+        }
+        public void OnDisable()
+        {
+            manualLogSource.LogInfo("Disabled");
+        }
+        #endregion
     }
 }
