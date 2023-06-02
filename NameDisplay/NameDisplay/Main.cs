@@ -12,6 +12,7 @@ namespace NameDisplay
             NAME = "NameTag",
             VERSION = "1.0.2";
         internal static Main Instance;
+
         internal ManualLogSource manualLogSource => Logger;
         internal bool InModded => GorillaNetworking.GorillaComputer.instance.currentGameMode.Contains("modded".ToUpper());
 
