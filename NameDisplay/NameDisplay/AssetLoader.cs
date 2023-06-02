@@ -1,22 +1,26 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 
-namespace NameTag.Util
+namespace NameDisplay
 {
     internal static class AssetLoader
     {
-        internal static Object GetAsset(string Name)
+        internal static async Task<GameObject> GetNameTagPrefab()
         {
-            return assetBundle.LoadAsset(Name);
+            AssetBundleRequest request = AssetBundle.LoadAssetAsync("TextObj");
+            new WaitUntil(() => request.isDone);
+            return request.asset as GameObject;
         }
+
         private static AssetBundle _assetBundle;
-        private static AssetBundle assetBundle
+        private static AssetBundle AssetBundle
         {
             get
             {
                 if (_assetBundle == null)
-                    using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("NameTag.Resources.text"))
+                    using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("NameDisplay.Resources.text"))
                     {
                         byte[] bytes = new byte[stream.Length];
                         stream.Read(bytes, 0, bytes.Length);
