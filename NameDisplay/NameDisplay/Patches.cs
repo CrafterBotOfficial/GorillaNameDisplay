@@ -17,6 +17,8 @@ namespace NameDisplay
         [HarmonyPatch(typeof(VRRig), "Start"), HarmonyPostfix, HarmonyWrapSafe]
         private static void Hook_VRRigAwake(VRRig __instance)
         {
+            Main.Instance.manualLogSource.LogInfo(PhotonNetwork.CurrentRoom.CustomProperties.ToString());
+
             Main.Instance.manualLogSource.LogInfo("VRRig created, checking it now;)");
             if (__instance.TryGetComponent(out PhotonView component) && !component.Owner.IsLocal && Main.Instance.InModded)
             {
