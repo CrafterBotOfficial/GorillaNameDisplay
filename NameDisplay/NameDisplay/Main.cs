@@ -11,7 +11,7 @@ namespace NameDisplay
         internal const string
             GUID = "crafterbot.nametag",
             NAME = "NameTag",
-            VERSION = "1.0.5";
+            VERSION = "1.0.6";
         internal static Main Instance;
 
         internal ManualLogSource manualLogSource => Logger;

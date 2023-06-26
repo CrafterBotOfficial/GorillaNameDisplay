@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using HarmonyLib;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace NameDisplay.Behaviours
 
         private void Start()
         {
-            player = Rig.GetComponent<PhotonView>().Owner;
+            player = Traverse.Create(Rig).Field("photonView").GetValue<PhotonView>().Owner;
             Text = GetComponentInChildren<Text>();
             PanelObj = transform.GetChild(0).gameObject;
 
@@ -28,7 +29,7 @@ namespace NameDisplay.Behaviours
 
         private void LateUpdate()
         {
-            if (Rig == null)
+            if (!Rig.gameObject.activeSelf)
                 ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
 
             // Enable/Disable

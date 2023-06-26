@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NameDisplay
@@ -14,13 +15,13 @@ namespace NameDisplay
             new ObjectPoolManager();
             Main.Instance.manualLogSource.LogInfo("Created object pool manager!");
         }
-        [HarmonyPatch(typeof(VRRig), "Start"), HarmonyPostfix, HarmonyWrapSafe]
-        private static void Hook_VRRigAwake(VRRig __instance)
+        [HarmonyPatch(typeof(VRRig), "OnEnable"), HarmonyPostfix, HarmonyWrapSafe]
+        private static async void VRRig_Enabled(VRRig __instance)
         {
-            Main.Instance.manualLogSource.LogInfo(PhotonNetwork.CurrentRoom.CustomProperties.ToString());
+            await Task.Delay(1000);
 
-            Main.Instance.manualLogSource.LogInfo("VRRig created, checking it now;)");
-            if (__instance.TryGetComponent(out PhotonView component) && !component.Owner.IsLocal && Main.Instance.InModded)
+            PhotonView view = Traverse.Create(__instance).Field("photonView").GetValue<PhotonView>();
+            if (view is object && !view.Owner.IsLocal && Main.Instance.InModded)
             {
                 if (ObjectPoolManager.Instance == null)
                     return; // well... shit
@@ -29,9 +30,9 @@ namespace NameDisplay
                 // Check for rig spammer
                 if (Behaviours.NameTag.ActiveNameTags != null)
                 {
-                    bool AlreadyCreatedNameTag = Behaviours.NameTag.ActiveNameTags.ContainsKey(component.Owner.UserId);
+                    bool AlreadyCreatedNameTag = Behaviours.NameTag.ActiveNameTags.ContainsKey(view.Owner.UserId);
                     if (AlreadyCreatedNameTag)
-                        ObjectPoolManager.Instance.ReturnObjectToPool(Behaviours.NameTag.ActiveNameTags[component.Owner.UserId].gameObject);
+                        ObjectPoolManager.Instance.ReturnObjectToPool(Behaviours.NameTag.ActiveNameTags[view.Owner.UserId].gameObject);
                 }
 
                 // Spawn nametag
