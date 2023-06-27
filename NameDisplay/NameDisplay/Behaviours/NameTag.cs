@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +8,6 @@ namespace NameDisplay.Behaviours
 {
     internal class NameTag : MonoBehaviour
     {
-        internal static Dictionary<string, NameTag> ActiveNameTags;
-
         internal VRRig Rig;
         private Player player;
 
@@ -23,9 +20,6 @@ namespace NameDisplay.Behaviours
             Text = GetComponentInChildren<Text>();
             Text.resizeTextForBestFit = false; // fix for assetbundle issue
             PanelObj = transform.GetChild(0).gameObject;
-
-            // Add self to list of nametags
-            ActiveNameTags.Add(player.UserId, this);
         }
 
         private void LateUpdate()
@@ -51,14 +45,6 @@ namespace NameDisplay.Behaviours
             // Update Rotation
             Vector3 LocalPlayerPosition = GorillaLocomotion.Player.Instance.transform.position;
             transform.LookAt(new Vector3(LocalPlayerPosition.x, transform.position.y, LocalPlayerPosition.z));
-        }
-
-        /* Disabling methods */
-
-        private void OnDestroy()
-        {
-            if (ActiveNameTags != null)
-                ActiveNameTags.Remove(player.UserId);
         }
     }
 }

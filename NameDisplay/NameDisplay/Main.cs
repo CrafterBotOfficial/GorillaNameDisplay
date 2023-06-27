@@ -4,26 +4,26 @@ using Utilla;
 
 namespace NameDisplay
 {
-    [BepInPlugin(GUID, NAME, VERSION)]
+    [BepInPlugin(Id, Name, Version)]
     [System.ComponentModel.Description("HauntedModMenu"), ModdedGamemode]
     internal class Main : BaseUnityPlugin
     {
         internal const string
-            GUID = "crafterbot.nametag",
-            NAME = "NameTag",
-            VERSION = "1.0.6";
+            Id = "crafterbot.nametag",
+            Name = "NameTag",
+            Version = "1.0.6";
         internal static Main Instance;
 
-        internal ManualLogSource manualLogSource => Logger;
+        internal ManualLogSource manualLogSource;
         internal bool InModded;
 
         internal Main()
         {
             Instance = this;
-            manualLogSource.LogInfo($"Loaded {NAME}");
+            manualLogSource = base.Logger;
+            manualLogSource.LogInfo($"Loaded {Name}");
 
-            Behaviours.NameTag.ActiveNameTags = new System.Collections.Generic.Dictionary<string, Behaviours.NameTag>();
-            new HarmonyLib.Harmony(GUID).PatchAll();
+            new HarmonyLib.Harmony(Id).PatchAll();
         }
 
         #region Utilla callbacks

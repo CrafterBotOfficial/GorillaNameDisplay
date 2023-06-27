@@ -25,15 +25,8 @@ namespace NameDisplay
             {
                 if (ObjectPoolManager.Instance == null)
                     return; // well... shit
-                Main.Instance.manualLogSource.LogInfo("Creating nametag for client!");
 
-                // Check for rig spammer
-                if (Behaviours.NameTag.ActiveNameTags != null)
-                {
-                    bool AlreadyCreatedNameTag = Behaviours.NameTag.ActiveNameTags.ContainsKey(view.Owner.UserId);
-                    if (AlreadyCreatedNameTag)
-                        ObjectPoolManager.Instance.ReturnObjectToPool(Behaviours.NameTag.ActiveNameTags[view.Owner.UserId].gameObject);
-                }
+                Main.Instance.manualLogSource.LogInfo("Creating nametag for client!");
 
                 // Spawn nametag
                 GameObject nameTagObj = ObjectPoolManager.Instance.PullObjectFromPool();

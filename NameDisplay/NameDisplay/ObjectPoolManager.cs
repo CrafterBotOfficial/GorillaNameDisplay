@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace NameDisplay
@@ -7,15 +8,15 @@ namespace NameDisplay
     {
         internal static ObjectPoolManager Instance { get; private set; }
 
-        internal List<GameObject> AvailableNameTags;
+        internal List<GameObject> PooledObject;
         internal ObjectPoolManager()
         {
             Instance = this;
-            AvailableNameTags = new List<GameObject>();
-            LoadPool();
+            PooledObject = new List<GameObject>();
+            FillPool();
         }
 
-        private async void LoadPool()
+        private async void FillPool()
         {
             Transform MasterObject = new GameObject("NameTag Object Pool").transform; // So other mod creators dont hate me for cluttering their hierarchy
             GameObject Prefab = await AssetLoader.GetNameTagPrefab();
@@ -25,14 +26,13 @@ namespace NameDisplay
             {
                 GameObject nameTagObj = GameObject.Instantiate(Prefab, MasterObject);
                 nameTagObj.SetActive(false);
-                AvailableNameTags.Add(nameTagObj);
+                PooledObject.Add(nameTagObj);
             }
         }
 
         internal GameObject PullObjectFromPool()
         {
-            GameObject nameTagObj = AvailableNameTags[0];
-            AvailableNameTags.RemoveAt(0);
+            GameObject nameTagObj = PooledObject.First(x => !x.activeSelf);
             nameTagObj.SetActive(true);
             Main.Instance.manualLogSource.LogInfo("Pulled nametag from pool!");
             return nameTagObj;
@@ -43,7 +43,6 @@ namespace NameDisplay
             if (nameTagObj.TryGetComponent(out Behaviours.NameTag nameTag))
                 GameObject.Destroy(nameTag);
             nameTagObj.SetActive(false);
-            AvailableNameTags.Add(nameTagObj);
         }
     }
 }
