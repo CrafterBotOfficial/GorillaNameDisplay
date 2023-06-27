@@ -21,7 +21,7 @@ namespace NameDisplay
             await Task.Delay(1000);
 
             PhotonView view = Traverse.Create(__instance).Field("photonView").GetValue<PhotonView>();
-            if (view is object && !view.Owner.IsLocal && Main.Instance.InModded)
+            if (view is object && !view.IsMine && Main.Instance.InModded)
             {
                 if (ObjectPoolManager.Instance == null)
                     return; // well... shit

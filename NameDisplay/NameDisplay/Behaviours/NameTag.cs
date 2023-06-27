@@ -45,6 +45,7 @@ namespace NameDisplay.Behaviours
                 if (Text.color != Rig.materialsToChangeTo[0].color)
                     Text.color = Rig.materialsToChangeTo[0].color;
             }
+
             // Update position
             transform.position = Rig.transform.position + Vector3.up * 0.5f;
             // Update Rotation
