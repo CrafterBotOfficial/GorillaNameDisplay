@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using Utilla;
 
@@ -11,31 +12,33 @@ namespace NameDisplay
         internal const string
             Id = "crafterbot.nametag",
             Name = "NameTag",
-            Version = "1.0.6";
+            Version = "1.0.7";
         internal static Main Instance;
 
-        internal ManualLogSource manualLogSource;
+        internal ManualLogSource manualLogSource => Logger;
         internal bool InModded;
+
+        internal ConfigEntry<bool> HideBadNames;
 
         internal Main()
         {
             Instance = this;
-            manualLogSource = base.Logger;
             manualLogSource.LogInfo($"Loaded {Name}");
+
+            HideBadNames = Config.Bind("General", "HideBadNames", true, "Hide names that are on the auto-ban list");
 
             new HarmonyLib.Harmony(Id).PatchAll();
         }
 
-        #region Utilla callbacks
+        /* Ugly code below :P (but tbh the whole program is ugly:( */
+
         [ModdedGamemodeJoin]
         private void OnJoin() =>
             InModded = true;
         [ModdedGamemodeLeave]
         private void OnLeave() =>
             InModded = false;
-        #endregion
 
-        #region Enable/Disable
         public void OnEnable()
         {
             manualLogSource.LogInfo("Enabled");
@@ -44,6 +47,5 @@ namespace NameDisplay
         {
             manualLogSource.LogInfo("Disabled");
         }
-        #endregion
     }
 }

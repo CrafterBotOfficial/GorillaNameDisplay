@@ -8,6 +8,8 @@ namespace NameDisplay.Behaviours
 {
     internal class NameTag : MonoBehaviour
     {
+        private string _NickName;
+
         internal VRRig Rig;
         private Player player;
 
@@ -35,8 +37,11 @@ namespace NameDisplay.Behaviours
             // Update stats
             if (Time.frameCount % 50 == 0)
             {
-                if (Text.text != player.NickName)
-                    Text.text = player.NickName;
+                if (_NickName != player.NickName)
+                {
+                    Text.text = NormalizeName(player.NickName);
+                    _NickName = player.NickName;
+                }
                 if (Text.color != Rig.materialsToChangeTo[0].color)
                     Text.color = Rig.materialsToChangeTo[0].color;
             }
@@ -45,6 +50,15 @@ namespace NameDisplay.Behaviours
             // Update Rotation
             Vector3 LocalPlayerPosition = GorillaLocomotion.Player.Instance.transform.position;
             transform.LookAt(new Vector3(LocalPlayerPosition.x, transform.position.y, LocalPlayerPosition.z));
+        }
+
+        private string NormalizeName(string Name)
+        {
+            if (!GorillaNetworking.GorillaComputer.instance.CheckAutoBanListForName(Name))
+            {
+                return Main.Instance.HideBadNames.Value ? "[HIDDED NAME]" : Name; // I am leaving this as a config option so people can report these people. Now ofc its going to trigger the anti cheat so it doesn't really matter :P
+            }
+            return Name.ToUpper();
         }
     }
 }
