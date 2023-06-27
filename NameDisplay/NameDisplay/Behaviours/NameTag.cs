@@ -21,6 +21,7 @@ namespace NameDisplay.Behaviours
         {
             player = Traverse.Create(Rig).Field("photonView").GetValue<PhotonView>().Owner;
             Text = GetComponentInChildren<Text>();
+            Text.resizeTextForBestFit = false; // fix for assetbundle issue
             PanelObj = transform.GetChild(0).gameObject;
 
             // Add self to list of nametags
