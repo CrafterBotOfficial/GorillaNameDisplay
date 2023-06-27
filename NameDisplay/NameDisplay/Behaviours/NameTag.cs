@@ -30,7 +30,7 @@ namespace NameDisplay.Behaviours
 
         private void LateUpdate()
         {
-            if (!Rig.gameObject.activeSelf)
+            if (!Rig.gameObject.activeSelf || player == null || !player.InRoom())
                 ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
 
             // Enable/Disable
@@ -38,12 +38,14 @@ namespace NameDisplay.Behaviours
             if (PanelObj.activeSelf != ShouldBeEnabled)
                 PanelObj.SetActive(ShouldBeEnabled);
 
-            // Update stats - I did check to ensure this would not spam the servers
-            if (Text.text != player.NickName)
-                Text.text = player.NickName;
-            if (Text.color != Rig.materialsToChangeTo[0].color)
-                Text.color = Rig.materialsToChangeTo[0].color;
-
+            // Update stats
+            if (Time.frameCount % 50 == 0)
+            {
+                if (Text.text != player.NickName)
+                    Text.text = player.NickName;
+                if (Text.color != Rig.materialsToChangeTo[0].color)
+                    Text.color = Rig.materialsToChangeTo[0].color;
+            }
             // Update position
             transform.position = Rig.transform.position + Vector3.up * 0.5f;
             // Update Rotation
