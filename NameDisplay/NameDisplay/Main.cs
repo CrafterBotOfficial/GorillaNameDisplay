@@ -1,6 +1,9 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+using System.IO;
+using System.Threading.Tasks;
+using UnityEngine;
 using Utilla;
 
 namespace NameDisplay
@@ -29,6 +32,22 @@ namespace NameDisplay
 
             new HarmonyLib.Harmony(Id).PatchAll();
         }
+
+        private AssetBundle _assetBundle;
+        internal Task<GameObject> LoadAsset(string Name)
+        {
+            if (_assetBundle == null)
+                using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("NameDisplay.Resources.text"))
+                {
+                    AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromStreamAsync(stream);
+                    new WaitUntil(() => assetBundleCreateRequest.isDone);
+                    _assetBundle = assetBundleCreateRequest.assetBundle;
+                }
+            AssetBundleRequest assetBundleRequest = _assetBundle.LoadAssetAsync<GameObject>(Name);
+            new WaitUntil(() => assetBundleRequest.isDone);
+            return Task.FromResult(assetBundleRequest.asset as GameObject);
+        }
+
 
         /* Ugly code below :P (but tbh the whole program is ugly:( */
 
