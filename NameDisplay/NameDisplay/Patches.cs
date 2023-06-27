@@ -18,7 +18,7 @@ namespace NameDisplay
         [HarmonyPatch(typeof(VRRig), "OnEnable"), HarmonyPostfix, HarmonyWrapSafe]
         private static async void VRRig_Enabled(VRRig __instance)
         {
-            await Task.Delay(1000);
+            await Task.Delay(2000);
 
             PhotonView view = Traverse.Create(__instance).Field("photonView").GetValue<PhotonView>();
             if (view is object && !view.IsMine && Main.Instance.InModded)

@@ -48,8 +48,9 @@ namespace NameDisplay.Behaviours
 
             // Update position
             transform.position = Rig.transform.position + Vector3.up * 0.5f;
+
             // Update Rotation
-            Vector3 LocalPlayerPosition = GorillaLocomotion.Player.Instance.transform.position;
+            Vector3 LocalPlayerPosition = Camera.main.transform.position;
             transform.LookAt(new Vector3(LocalPlayerPosition.x, transform.position.y, LocalPlayerPosition.z));
         }
 

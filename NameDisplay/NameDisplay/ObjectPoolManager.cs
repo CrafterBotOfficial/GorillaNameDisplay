@@ -21,7 +21,7 @@ namespace NameDisplay
             Transform MasterObject = new GameObject("NameTag Object Pool").transform; // So other mod creators dont hate me for cluttering their hierarchy
             GameObject Prefab = await Main.Instance.LoadAsset("TextObj");
 
-            const int PoolSize = 15; // Slightly larger then the max number of players in a game to make it more robust. FUCK RIG SPAMMERS
+            const int PoolSize = 50; // Slightly larger then the max number of players in a game to make it more robust. FUCK RIG SPAMMERS
             for (int i = 0; i < PoolSize; i++)
             {
                 GameObject nameTagObj = GameObject.Instantiate(Prefab, MasterObject);
