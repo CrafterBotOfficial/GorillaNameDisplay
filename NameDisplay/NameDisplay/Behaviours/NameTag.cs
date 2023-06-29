@@ -1,6 +1,6 @@
-﻿using HarmonyLib;
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Realtime;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +18,7 @@ namespace NameDisplay.Behaviours
 
         private void Start()
         {
-            player = Traverse.Create(Rig).Field("photonView").GetValue<PhotonView>().Owner;
+            player = Rig.photonView.Owner; // Traverse.Create(Rig).Field("photonView").GetValue<PhotonView>().Owner;
             Text = GetComponentInChildren<Text>();
             Text.resizeTextForBestFit = false; // fix for assetbundle issue
             PanelObj = transform.GetChild(0).gameObject;
@@ -26,7 +26,7 @@ namespace NameDisplay.Behaviours
 
         private void LateUpdate()
         {
-            if (!Rig.gameObject.activeSelf || player == null || !player.InRoom())
+            if (Rig == null || player == null || !PhotonNetwork.PlayerList.Contains(player))
                 ObjectPoolManager.Instance.ReturnObjectToPool(gameObject);
 
             // Enable/Disable
