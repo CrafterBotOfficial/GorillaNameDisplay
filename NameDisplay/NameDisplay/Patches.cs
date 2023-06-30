@@ -17,7 +17,7 @@ namespace NameDisplay
         [HarmonyPatch(typeof(VRRig), "Start"), HarmonyPostfix, HarmonyWrapSafe]
         private static void VRRig_Started(VRRig __instance)
         {
-            if (__instance.isOfflineVRRig || __instance.photonView.IsMine)
+            if (__instance.isOfflineVRRig || __instance.photonView.IsMine || !Main.Instance.InModded)
                 return;
 
             // PhotonView view = Traverse.Create(__instance).Field("photonView").GetValue<PhotonView>();
