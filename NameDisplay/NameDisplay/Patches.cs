@@ -6,15 +6,14 @@ namespace NameDisplay
     [HarmonyPatch]
     internal class Patches
     {
-        internal static async void RigCache_RigSpawned_Postfix()
+        [HarmonyPatch(typeof(VRRig), "Start"), HarmonyPostfix]
+        internal static async void VRRig_Start(VRRig __instance)
         {
-            Transform RigParent = GameObject.Find("Rig Parent").transform;
-            VRRig Rig = RigParent.GetChild(RigParent.childCount - 1).GetComponent<VRRig>();
-            if (Rig.isMyPlayer || Rig.isOfflineVRRig)
+            if (__instance.isMyPlayer || __instance.isOfflineVRRig)
                 return;
             
             Main.Instance.manualLogSource.LogInfo("Creating nametag for Rig");
-            GameObject.Instantiate(await Main.Instance.LoadAsset("TextObj"), Rig.transform).AddComponent<Behaviours.NameTag>().Rig = Rig;
+            GameObject.Instantiate(await Main.Instance.LoadAsset("TextObj"), __instance.transform).AddComponent<Behaviours.NameTag>().Rig = __instance;
         }
 
         [HarmonyPatch(typeof(VRRig), nameof(VRRig.InitializeNoobMaterialLocal)), HarmonyPostfix]

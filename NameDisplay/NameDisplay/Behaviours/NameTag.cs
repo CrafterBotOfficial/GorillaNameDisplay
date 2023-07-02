@@ -7,6 +7,8 @@ namespace NameDisplay.Behaviours
 {
     internal class NameTag : MonoBehaviour
     {
+        private GameObject PanelObj;
+
         internal VRRig Rig;
         private Traverse traverse;
 
@@ -16,9 +18,11 @@ namespace NameDisplay.Behaviours
 
             traverse = Traverse.Create(Rig);
             traverse.Field("photonView");
+
+            PanelObj = transform.GetChild(0).gameObject;
         }
 
-        private void LateUpdate()
+        private void Update()
         {
             if (SetState())
                 return;
@@ -38,12 +42,16 @@ namespace NameDisplay.Behaviours
             text.color = Rig.materialsToChangeTo[0].color;
         }
 
+        /// <returns>True if the script needs to be haulted due to the rig being inactive. (or not in a modded room)</returns>
         private bool SetState()
         {
-            bool IsInactive = !Rig.gameObject.activeSelf  || !Main.Instance.InModded;
-            if (gameObject.activeSelf != IsInactive)
-                gameObject.SetActive(IsInactive);
-            return IsInactive;
+            bool Active = Rig.gameObject.activeSelf && Main.Instance.InModded;
+            if (PanelObj.activeSelf != Active)
+            {
+                Main.Instance.manualLogSource.LogInfo($"Setting nametag state to {Active}");
+                PanelObj.SetActive(Active);
+            }
+            return !Active;
         }
 
         private string NormalizeName(string Name)
