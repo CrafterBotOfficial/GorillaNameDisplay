@@ -6,8 +6,7 @@ namespace NameDisplay
     [HarmonyPatch]
     internal class Patches
     {
-        [HarmonyPatch(typeof(VRRig), "Start"), HarmonyPostfix]
-        internal static async void VRRig_Start(VRRig __instance)
+        internal static async void RigContainer_Start()
         {
             if (__instance.isMyPlayer || __instance.isOfflineVRRig)
                 return;

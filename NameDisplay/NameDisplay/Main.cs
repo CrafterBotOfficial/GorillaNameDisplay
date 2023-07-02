@@ -35,9 +35,10 @@ namespace NameDisplay
             HideBadNames = Config.Bind("General", "HideBadNames", true, "Hide names that are on the auto-ban list");
             NameTags = new Dictionary<VRRig, Behaviours.NameTag>();
 
-            new HarmonyLib.Harmony(Id).PatchAll();
-            // Type VRRigCache = typeof(GorillaTagger).Assembly.GetType("VRRigCache"); 
-            // harmony.Patch(VRRigCache.GetMethod("SpawnRig", BindingFlags.NonPublic | BindingFlags.Instance), postfix: new HarmonyLib.HarmonyMethod(typeof(Patches), nameof(Patches.RigCache_RigSpawned_Postfix)));
+            var harmony = new HarmonyLib.Harmony(Id);
+            harmony.PatchAll();
+            Type VRRigCache = typeof(GorillaTagger).Assembly.GetType("RigContainer"); 
+            harmony.Patch(VRRigCache.GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance), postfix: new HarmonyLib.HarmonyMethod(typeof(Patches), nameof(Patches.RigContainer_Start)));
         }
 
         private AssetBundle _assetBundle;
