@@ -1,8 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using System;
 using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -20,7 +20,11 @@ namespace NameDisplay
             Name = "NameTag",
             Version = "1.1.0";
         internal static Main Instance;
+
         internal ManualLogSource manualLogSource => Logger;
+        
+        internal GameObject NameTagPrefab;
+        internal Transform MasterObject;
 
         internal Dictionary<VRRig, Behaviours.NameTag> NameTags;
         internal bool InModded;
@@ -35,16 +39,17 @@ namespace NameDisplay
             HideBadNames = Config.Bind("General", "HideBadNames", true, "Hide names that are on the auto-ban list");
             NameTags = new Dictionary<VRRig, Behaviours.NameTag>();
 
-            new HarmonyLib.Harmony(Id).PatchAll();
-            // Type VRRigCache = typeof(GorillaTagger).Assembly.GetType("VRRigCache"); 
-            // harmony.Patch(VRRigCache.GetMethod("SpawnRig", BindingFlags.NonPublic | BindingFlags.Instance), postfix: new HarmonyLib.HarmonyMethod(typeof(Patches), nameof(Patches.RigCache_RigSpawned_Postfix)));
+            var harmony = new HarmonyLib.Harmony(Id);
+            harmony.PatchAll();
+            Type VRRigCache = typeof(GorillaTagger).Assembly.GetType("VRRigCache");
+            harmony.Patch(VRRigCache.GetMethod("SpawnRig", BindingFlags.NonPublic | BindingFlags.Instance), postfix: new HarmonyLib.HarmonyMethod(typeof(Patches), nameof(Patches.VRRigCache_SpawnRig_Postfix)));
         }
 
         private AssetBundle _assetBundle;
         internal Task<GameObject> LoadAsset(string Name)
         {
             if (_assetBundle == null)
-                using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("NameDisplay.Resources.text"))
+                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("NameDisplay.Resources.text"))
                 {
                     AssetBundleCreateRequest assetBundleCreateRequest = AssetBundle.LoadFromStreamAsync(stream);
                     new WaitUntil(() => assetBundleCreateRequest.isDone);
