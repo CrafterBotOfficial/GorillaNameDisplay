@@ -80,7 +80,6 @@
   <ItemGroup>
     <Compile Include="Behaviours\NameTag.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="ObjectPoolManager.cs" />
     <Compile Include="Patches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

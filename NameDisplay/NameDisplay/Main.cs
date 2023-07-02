@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -15,10 +16,13 @@ namespace NameDisplay
         internal const string
             Id = "crafterbot.nametag",
             Name = "NameTag",
-            Version = "1.0.8";
+            Version = "1.1.0";
         internal static Main Instance;
 
         internal ManualLogSource manualLogSource => Logger;
+        
+        internal GameObject NameTagPrefab;
+        internal Dictionary<VRRig, Behaviours.NameTag> NameTags;
         internal bool InModded;
 
         internal ConfigEntry<bool> HideBadNames;
@@ -30,7 +34,13 @@ namespace NameDisplay
 
             HideBadNames = Config.Bind("General", "HideBadNames", true, "Hide names that are on the auto-ban list");
 
+            NameTags = new Dictionary<VRRig, Behaviours.NameTag>();
             new HarmonyLib.Harmony(Id).PatchAll();
+        }
+
+        private async void LoadPrefab()
+        {
+            NameTagPrefab = await LoadAsset("TextObj");
         }
 
         private AssetBundle _assetBundle;
@@ -58,13 +68,14 @@ namespace NameDisplay
         private void OnLeave() =>
             InModded = false;
 
+        // Only here to allow CI & HauntedModMenu to work
         public void OnEnable()
         {
-            manualLogSource.LogInfo("Enabled");
+            // manualLogSource.LogInfo("Enabled");
         }
         public void OnDisable()
         {
-            manualLogSource.LogInfo("Disabled");
+            // manualLogSource.LogInfo("Disabled");
         }
     }
 }
