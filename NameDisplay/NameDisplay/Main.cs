@@ -1,8 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using Utilla;
@@ -18,10 +20,8 @@ namespace NameDisplay
             Name = "NameTag",
             Version = "1.1.0";
         internal static Main Instance;
-
         internal ManualLogSource manualLogSource => Logger;
-        
-        internal GameObject NameTagPrefab;
+
         internal Dictionary<VRRig, Behaviours.NameTag> NameTags;
         internal bool InModded;
 
@@ -33,14 +33,12 @@ namespace NameDisplay
             manualLogSource.LogInfo($"Loaded {Name}");
 
             HideBadNames = Config.Bind("General", "HideBadNames", true, "Hide names that are on the auto-ban list");
-
             NameTags = new Dictionary<VRRig, Behaviours.NameTag>();
-            new HarmonyLib.Harmony(Id).PatchAll();
-        }
 
-        private async void LoadPrefab()
-        {
-            NameTagPrefab = await LoadAsset("TextObj");
+            var harmony = new HarmonyLib.Harmony(Id);
+            harmony.PatchAll();
+            Type VRRigCache = typeof(GorillaTagger).Assembly.GetType("VRRigCache");
+            harmony.Patch(VRRigCache.GetMethod("SpawnRig", BindingFlags.NonPublic | BindingFlags.Instance), postfix: new HarmonyLib.HarmonyMethod(typeof(Patches), nameof(Patches.RigCache_RigSpawned_Postfix)));
         }
 
         private AssetBundle _assetBundle;
