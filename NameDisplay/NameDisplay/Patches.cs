@@ -6,7 +6,7 @@ namespace NameDisplay
     [HarmonyPatch]
     internal class Patches
     {
-        internal static async void RigContainer_Start(object __result)
+        internal static async void VRRigCache_SpawnRig_Postfix(object __result)
         {
             if (Main.Instance.MasterObject == null)
                 Main.Instance.MasterObject = new GameObject("NameTags").transform;
