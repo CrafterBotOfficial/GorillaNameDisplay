@@ -14,6 +14,7 @@ namespace NameDisplay.Behaviours
         {
             Main.Instance.NameTags.Add(Rig, this);
             PanelObj = transform.GetChild(0).gameObject;
+            GetComponentInChildren<Text>().resizeTextForBestFit = false; // Prevents warnings due to the assets settings
         }
 
         private void Update()
@@ -39,7 +40,7 @@ namespace NameDisplay.Behaviours
         /// <returns>True if the script needs to be haulted due to the rig being inactive. (or not in a modded room)</returns>
         private bool SetState()
         {
-            bool Active = Rig.gameObject.activeSelf && Main.Instance.InModded;
+            bool Active = Rig.gameObject.activeSelf && Main.Instance.InModded && Main.Instance.enabled;
             if (PanelObj.activeSelf != Active)
             {
                 Main.Instance.manualLogSource.LogInfo($"Setting nametag state to {Active}");
