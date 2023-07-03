@@ -41,8 +41,9 @@ namespace NameDisplay
 
             var harmony = new HarmonyLib.Harmony(Id);
             harmony.PatchAll();
-            Type VRRigCache = typeof(GorillaTagger).Assembly.GetType("VRRigCache");
-            harmony.Patch(VRRigCache.GetMethod("SpawnRig", BindingFlags.NonPublic | BindingFlags.Instance), postfix: new HarmonyLib.HarmonyMethod(typeof(Patches), nameof(Patches.VRRigCache_SpawnRig_Postfix)));
+
+            Type VRRigCache = typeof(GorillaTagger).Assembly.GetType("RigContainer"); 
+            harmony.Patch(VRRigCache.GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance), postfix: new HarmonyLib.HarmonyMethod(typeof(Patches), nameof(Patches.RigContainer_Start)));
         }
 
         private AssetBundle _assetBundle;
