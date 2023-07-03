@@ -16,7 +16,7 @@ namespace NameDisplay
             NameTag.AddComponent<Behaviours.NameTag>().Rig = Rig;
         }
 
-        [HarmonyPatch(typeof(VRRig), nameof(VRRig.InitializeNoobMaterialLocal)), HarmonyPostfix]
+        [HarmonyPatch(typeof(VRRig), nameof(VRRig.InitializeNoobMaterialLocal)), HarmonyPostfix, HarmonyWrapSafe]
         private static void VRRig_InitializeNoobMaterialLocal_Postfix(VRRig __instance)
         {
             if (!__instance.isMyPlayer && !__instance.isOfflineVRRig)

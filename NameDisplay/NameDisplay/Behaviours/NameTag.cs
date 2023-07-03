@@ -8,17 +8,11 @@ namespace NameDisplay.Behaviours
     internal class NameTag : MonoBehaviour
     {
         private GameObject PanelObj;
-
         internal VRRig Rig;
-        private Traverse traverse;
 
         private void Start()
         {
             Main.Instance.NameTags.Add(Rig, this);
-
-            traverse = Traverse.Create(Rig);
-            traverse.Field("photonView");
-
             PanelObj = transform.GetChild(0).gameObject;
         }
 
@@ -38,7 +32,7 @@ namespace NameDisplay.Behaviours
         internal void RigNoobDataInitialized()
         {
             Text text = GetComponentInChildren<Text>();
-            text.text = NormalizeName(traverse.GetValue<PhotonView>().Owner.NickName);
+            text.text = Rig.playerText.text;// NormalizeName(traverse.GetValue<PhotonView>().Owner.NickName);
             text.color = Rig.materialsToChangeTo[0].color;
         }
 
@@ -54,13 +48,13 @@ namespace NameDisplay.Behaviours
             return !Active;
         }
 
-        private string NormalizeName(string Name)
+        /*private string NormalizeName(string Name)
         {
             if (!GorillaNetworking.GorillaComputer.instance.CheckAutoBanListForName(Name))
             {
                 return Main.Instance.HideBadNames.Value ? "[HIDDED NAME]" : Name; // I am leaving this as a config option so people can report these people. Now ofc its going to trigger the anti cheat so it doesn't really matter :P
             }
             return Name.ToUpper().Replace(" ", "");
-        }
+        }*/
     }
 }
