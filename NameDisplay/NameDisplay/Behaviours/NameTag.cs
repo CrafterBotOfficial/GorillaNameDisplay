@@ -49,8 +49,6 @@ namespace NameDisplay.Behaviours
             Rig = rig;
             _rigTransform = rig.transform;
             NameTags.Add(rig, this);
-
-            RigInitializeNoobData();
         }
 
         internal void RigInitializeNoobData()

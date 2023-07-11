@@ -7,7 +7,7 @@ namespace NameDisplay
         [HarmonyPatch(typeof(VRRig), nameof(VRRig.InitializeNoobMaterialLocal)), HarmonyPostfix, HarmonyWrapSafe]
         private static void VRRig_InitializeNoobMaterialLocal_Postfix(VRRig __instance)
         {
-            if (Main.Instance.InModded && __instance.isOfflineVRRig)
+            if (Main.Instance.InModded)
                 Behaviours.NameTag.NameTags[__instance].RigInitializeNoobData();
         }
     }
