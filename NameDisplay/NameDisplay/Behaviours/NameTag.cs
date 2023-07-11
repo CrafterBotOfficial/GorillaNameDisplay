@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using Photon.Pun;
+﻿using Photon.Realtime;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,55 +7,56 @@ namespace NameDisplay.Behaviours
 {
     internal class NameTag : MonoBehaviour
     {
-        private GameObject PanelObj;
-        internal VRRig Rig;
+        internal static Dictionary<VRRig, NameTag> NameTags = new Dictionary<VRRig, NameTag>();
 
-        private void Start()
+        internal VRRig Rig;
+        private Transform _rigTransform;
+        private Text _text;
+        private GameObject _panel;
+
+        private void Awake()
         {
-            Main.Instance.NameTags.Add(Rig, this);
-            PanelObj = transform.GetChild(0).gameObject;
-            GetComponentInChildren<Text>().resizeTextForBestFit = false; // Prevents warnings due to the assets settings
+            Main.Log("NameTag Awake");
+            _text = GetComponentInChildren<Text>();
+            _text.resizeTextForBestFit = false; // Made a mistake in the prefab
+            _panel = transform.GetChild(0).gameObject;
+
+            RigInitializeNoobData();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
-            if (SetState())
+            if (!Rig.gameObject.activeSelf)
+                ObjectPoolManager.Instance.Push(this);
+            if (SetAcivity())
                 return;
 
-            // Update position
-            transform.position = Rig.transform.position + Vector3.up * 0.5f;
-
-            // Update Rotation
-            Vector3 LocalPlayerPosition = Camera.main.transform.position;
-            transform.LookAt(new Vector3(LocalPlayerPosition.x, transform.position.y, LocalPlayerPosition.z));
+            transform.position = _rigTransform.position + Vector3.up * .5f;
+            transform.LookAt(new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z));
         }
 
-        internal void RigNoobDataInitialized()
+        /// <returns>True if the nametag is disabled, and movement should be haulted</returns>
+        private bool SetAcivity()
         {
-            Text text = GetComponentInChildren<Text>();
-            text.text = Rig.playerText.text;// NormalizeName(traverse.GetValue<PhotonView>().Owner.NickName);
-            text.color = Rig.materialsToChangeTo[0].color;
+            bool active = Main.Instance.enabled;
+            if (active != _panel.activeSelf)
+                _panel.SetActive(active);
+            return !active;
         }
 
-        /// <returns>True if the script needs to be haulted due to the rig being inactive. (or not in a modded room)</returns>
-        private bool SetState()
+        /* Internal */
+
+        internal void Initialize(VRRig rig)
         {
-            bool Active = Rig.gameObject.activeSelf && Main.Instance.InModded && Main.Instance.enabled;
-            if (PanelObj.activeSelf != Active)
-            {
-                Main.Instance.manualLogSource.LogInfo($"Setting nametag state to {Active}");
-                PanelObj.SetActive(Active);
-            }
-            return !Active;
+            Rig = rig;
+            _rigTransform = rig.transform;
+            NameTags.Add(rig, this);
         }
 
-        /*private string NormalizeName(string Name)
+        internal void RigInitializeNoobData()
         {
-            if (!GorillaNetworking.GorillaComputer.instance.CheckAutoBanListForName(Name))
-            {
-                return Main.Instance.HideBadNames.Value ? "[HIDDED NAME]" : Name; // I am leaving this as a config option so people can report these people. Now ofc its going to trigger the anti cheat so it doesn't really matter :P
-            }
-            return Name.ToUpper().Replace(" ", "");
-        }*/
+            _text.color = Rig.materialsToChangeTo[0].color;
+            _text.text = Rig.playerText.text;
+        }
     }
 }
