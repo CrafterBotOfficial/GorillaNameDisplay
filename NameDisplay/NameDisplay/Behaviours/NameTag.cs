@@ -20,8 +20,6 @@ namespace NameDisplay.Behaviours
             _text = GetComponentInChildren<Text>();
             _text.resizeTextForBestFit = false; // Made a mistake in the prefab
             _panel = transform.GetChild(0).gameObject;
-
-            RigInitializeNoobData();
         }
 
         private void LateUpdate()
@@ -51,6 +49,8 @@ namespace NameDisplay.Behaviours
             Rig = rig;
             _rigTransform = rig.transform;
             NameTags.Add(rig, this);
+
+            RigInitializeNoobData();
         }
 
         internal void RigInitializeNoobData()
